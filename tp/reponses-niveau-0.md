@@ -93,3 +93,16 @@ curl -X POST http://localhost:8080/api/commandes \
             {"id_plat": 10, "quantite": 1}
             ]}'
 ```
+### 0.4 Suivre une requête de bout en bout
+
+| # | Étape | Fichier | Fonction / ligne |
+|---|---|---|---|
+| 1 | Le formulaire est soumis | `components/PlatForm.vue` | `enregistrer()` |
+| 2 | La requête HTTP est construite | `api.js` | `requete()` |
+| 3 | Vite transmet `/api/...` au port 8080 | `vite.config.js` | `lignes 10 -11` |
+| 4 | CodeIgniter choisit le contrôleur | `app/Config/Routes.php`| `ligne 20` |
+| 5 | Le contrôleur lit le JSON | `backend/app/Controllers/Api/Plats.php` | `create()` : `$this->donneesJson()` |
+| 6 | Les règles de validation sont vérifiées | `backend/app/Models/PlatModel.php` | `$validationRules`, lors de `insert()` |
+| 7 | La ligne est insérée | `backend/app/Controllers/Api/Plats.php` | `create()` : `$this->plats->insert($donnees)` |
+| 8 | Le formulaire prévient l’écran parent | `frontend/src/components/PlatForm.vue` | `enregistrer()` : `emit('enregistre', resultat)` |
+| 9 | L’écran recharge la liste | `frontend/src/views/CarteView.vue` | `surEnregistrement()` : `await charger()` |
