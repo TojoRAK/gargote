@@ -14,3 +14,82 @@
 - On peut insérer plats identiques
 - Plusieurs commandes à une même
 
+
+### 0.3 Interroger l'API à la main
+- a) Liste des soupes :  HTTP/1.1 200 OK
+```json
+
+[
+    {
+        "id": 7,
+        "nom": "Mi sao",
+        "prix": 6500,
+        "id_categorie": 2,
+        "categorie": "Soupe"
+    },
+    {
+        "id": 6,
+        "nom": "Soupe chinoise",
+        "prix": 6000,
+        "id_categorie": 2,
+        "categorie": "Soupe"
+    }
+]
+```
+- b) Création d'un plat valide : HTTP/1.1 201 Created
+```json
+{
+    "id": 13,
+    "nom": "Mofo gasy",
+    "prix": 300,
+    "id_categorie": 1
+}
+
+```
+
+- c) Création d'un plat invalide : HTTP/1.1 422 Unprocessable Content
+
+```json
+{
+    "message": "Données invalides.",
+    "errors": {
+        "nom": "Le nom du plat est obligatoire.",
+        "prix": "Le prix doit être un nombre entier (en Ariary).",
+        "id_categorie": "Choisissez une catégorie."
+    }
+}
+```
+- d) Suppression d'un plat présent dans une commande : HTTP/1.1 409 Conflict
+```json
+{
+    "message": "Ce plat figure déjà dans des commandes, il ne peut pas être supprimé.",
+    "errors": {}
+}
+```
+
+- e) Une commande qui n'existe pas : HTTP/1.1 404 Not Found
+```json
+{
+    "message": "Commande 999 introuvable.",
+    "errors": {}
+}
+```
+
+5. Pour la requête b, on obtient 201 car il s'agit d'une création
+6. C'est PHP qui transforme le blocage en 409 : 
+```php
+return $this->erreur('Ce plat figure déjà dans des commandes, il ne peut pas être supprimé.', 409);
+```
+
+7. Creation de commande
+```bash
+curl -X POST http://localhost:8080/api/commandes \
+     -H "Content-Type: application/json" \
+     -d '{
+     "numero_table":4,
+            "lignes":
+                [
+            {"id_plat": 4, "quantite": 2},
+            {"id_plat": 10, "quantite": 1}
+            ]}'
+```
