@@ -4,3 +4,10 @@
 2. Avec la colonne `est_plat_du_jour`, on perd : 
     - les plats proposés les jours d'avant
     - 
+
+### 1.2  Données de test
+3. 
+    - Plat à 0Ar : ERROR:  new row for relation "plat" violates check constraint "chk_prix_plat"
+DÉTAIL : Failing row contains (17, TEST, 0, 1, null, t).
+    - Plat dont le nom existe : ERROR:  duplicate key value violates unique constraint "chk_unique_nom_plat"
+    DÉTAIL : Key (nom)=(Romazava) already exists.
